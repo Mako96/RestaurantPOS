@@ -37,17 +37,17 @@
                 <div id="messages">
                 </div>
 
-                <?php if($this->session->flashdata('success')): ?>
-          <div class="alert alert-success alert-dismissible mui-app-bar" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <?php echo $this->session->flashdata('success'); ?>
-          </div>
-        <?php elseif($this->session->flashdata('errors')): ?>
-          <div class="alert alert-error alert-dismissible mui-app-bar" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <?php echo $this->session->flashdata('errors'); ?>
-          </div>
-        <?php endif; ?>
+                <?php if ($this->session->flashdata('success')) : ?>
+                  <div class="alert alert-success alert-dismissible mui-app-bar" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <?php echo $this->session->flashdata('success'); ?>
+                  </div>
+                <?php elseif ($this->session->flashdata('errors')) : ?>
+                  <div class="alert alert-error alert-dismissible mui-app-bar" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <?php echo $this->session->flashdata('errors'); ?>
+                  </div>
+                <?php endif; ?>
 
                 <div class="box">
                   <div class="box-header">
@@ -57,6 +57,7 @@
                   <form action="<?php base_url('orders/create') ?>" method="post" class="form-horizontal" id="createOrderForm">
 
                     <input type="hidden" id='payment_type' name="payment_type" type='text'>
+                    <input type="hidden" id='customerNumberSubmit' name="customerNumberSubmit" type='text'>
                     <div class="box-body">
 
                       <?php echo validation_errors(); ?>
@@ -194,7 +195,7 @@
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#paymentModal" onclick="customerModalNextClick()">Next</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#paymentModal">Next</button>
                       </div>
 
                   </form>
@@ -411,6 +412,7 @@
       var base_url = "<?php echo base_url(); ?>";
       var productInfoTable;
       var isCustomerExists = 0;
+      var customerNumber;
       $(document).ready(function() {
         $(".select_group").select2();
         $("#OrderMainNav").addClass('active');
@@ -488,6 +490,7 @@
         if (phone_number == null) {
           alert("Empty or invalid phone number! Please Enter again.");
         } else { //alert("Sending AJAX request");
+          customerNumber = phone_number;
           $.ajax({
             url: base_url + 'orders/getCustomerData/',
             type: 'post',
@@ -602,7 +605,7 @@
         }
       }
 
-      function customerModalNextClick() {
+      function insertNewCustomer() {
         console.log('CLICKED' + isCustomerExists);
         if (!isCustomerExists) {
           $.ajax({
@@ -623,7 +626,7 @@
       function placeOrder(paymentType) {
         console.log('called ' + paymentType);
         $('#payment_type').val(paymentType);
-
+        $('#customerNumberSubmit').val(customerNumber);
         var val = $('#payment_type').val();
         console.log('val=' + val);
 

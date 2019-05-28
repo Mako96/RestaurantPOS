@@ -242,7 +242,7 @@ class Orders extends Admin_Controller
 	*/
 	public function create()
 	{
-		
+
 		if (!in_array('createOrder', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
@@ -265,15 +265,16 @@ class Orders extends Admin_Controller
 
 			if ($order_id) {
 				$this->session->set_flashdata('success', 'Successfully created');
-				
-			//	return response()->json(array('message' => $schedule['formattedDate'] , 'success' => 0));
-			$response = array('redirectURL' => base_url('orders/update/' . $order_id));
-			//	echo json_encode(array('redirectURL' => redirect('orders/update/' . $order_id, 'refresh')));
-			echo json_encode($response);
+
+				//	return response()->json(array('message' => $schedule['formattedDate'] , 'success' => 0));
+				$response = array('redirectURL' => base_url('orders/update/' . $order_id));
+				//	echo json_encode(array('redirectURL' => redirect('orders/update/' . $order_id, 'refresh')));
+
+				echo json_encode($response);
 			} else {
-	
-				$this->session->set_flashdata('errors', 'Error occurred!!');	
-				$response = array('redirectURL' => base_url('orders/create/' . $order_id));	
+
+				$this->session->set_flashdata('errors', 'Error occurred!!');
+				$response = array('redirectURL' => base_url('orders/create/' . $order_id));
 				echo json_encode($response);
 				// echo json_encode(array('redirectURL' => redirect('orders/create/', 'refresh')));
 			}
@@ -462,11 +463,15 @@ class Orders extends Admin_Controller
 			  <!-- Font Awesome -->
 			  <link rel="stylesheet" href="' . base_url('assets/bower_components/font-awesome/css/font-awesome.min.css') . '">
 			  <link rel="stylesheet" href="' . base_url('assets/dist/css/AdminLTE.min.css') . '">
+				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css">
+				<style>
+   				 @page { size: 58mm } /* output size */
+   				 body.receipt .sheet { width: 58mm } /* sheet size */
+    			 @media print { body.receipt { width: 58mm } } /* fix for Chrome */
+ 				</style>
 			</head>
-			<body onload="window.print();">
-			
-			<div class="wrapper">
-			  <section class="invoice">
+			<body class="receipt" onload="window.print();">
+			  <section class="sheet padding-10mm">
 			    <!-- title row -->
 			    <div class="row">
 			      <div class="col-xs-12">
@@ -523,7 +528,7 @@ class Orders extends Admin_Controller
 
 			    <div class="row">
 			      
-			      <div class="col-xs-6 pull pull-right">
+			     
 
 			        <div class="table-responsive">
 			          <table class="table">
@@ -541,7 +546,7 @@ class Orders extends Admin_Controller
 
 			if ($order_data['vat_charge_amount'] > 0) {
 				$html .= '<tr>
-				              <th>Vat Charge (' . $order_data['vat_charge_rate'] . '%)</th>
+				              <th>GST (' . $order_data['vat_charge_rate'] . '%)</th>
 				              <td>' . $this->currency_code . ' ' . $order_data['vat_charge_amount'] . '</td>
 				            </tr>';
 			}
@@ -555,19 +560,18 @@ class Orders extends Admin_Controller
 			              <th>Net Amount:</th>
 			              <td>' . $this->currency_code . ' ' . $order_data['net_amount'] . '</td>
 			            </tr>
-			            // <tr>
-			            //   <th>Paid Status:</th>
-			            //   <td>' . $paid_status . '</td>
-			            // </tr>
+			            <tr>
+			              <th>Paid Status:</th>
+			              <td>' . $paid_status . '</td>
+			            </tr>
 			          </table>
 			        </div>
-			      </div>
+			     
 			      <!-- /.col -->
 			    </div>
 			    <!-- /.row -->
 			  </section>
 			  <!-- /.content -->
-			</div>
 		</body>
 	</html>';
 
