@@ -58,6 +58,7 @@
 
                     <input type="hidden" id='payment_type' name="payment_type" type='text'>
                     <input type="hidden" id='customerNumberSubmit' name="customerNumberSubmit" type='text'>
+                    <input type="hidden" id='customerEmailSubmit' name="customerEmailSubmit" type='text'>
                     <div class="box-body">
 
                       <?php echo validation_errors(); ?>
@@ -412,7 +413,7 @@
       var base_url = "<?php echo base_url(); ?>";
       var productInfoTable;
       var isCustomerExists = 0;
-      var customerNumber;
+      var customerNumber, customerEmail;
       $(document).ready(function() {
         $(".select_group").select2();
         $("#OrderMainNav").addClass('active');
@@ -507,6 +508,7 @@
                   isCustomerExists = 1;
                   $('#customer_name').val(data[0].name);
                   $('#customer_email').val(data[0].email_address);
+                  customerEmail = data[0].email_address;
                 }
 
               } // /success
@@ -627,6 +629,7 @@
         console.log('called ' + paymentType);
         $('#payment_type').val(paymentType);
         $('#customerNumberSubmit').val(customerNumber);
+        $('#customerEmailSubmit').val(customerEmail);
         var val = $('#payment_type').val();
         console.log('val=' + val);
 

@@ -10,7 +10,7 @@ class Orders extends Admin_Controller
 	{
 		parent::__construct();
 
-		$this->not_logged_in();
+		// $this->not_logged_in();
 
 		$this->data['page_title'] = 'Orders';
 
@@ -65,7 +65,7 @@ class Orders extends Admin_Controller
 			$buttons = '';
 
 			if (in_array('viewOrder', $this->permission)) {
-				$buttons .= '<a target="__blank" href="' . base_url('orders/printDiv/' . $value['id']) . '" class="btn btn-default"><i class="fa fa-print"></i></a>';
+				$buttons .= '<a target="__blank" href="' . base_url('orders/printDiv/' . $value['bill_no']) . '" class="btn btn-default"><i class="fa fa-print"></i></a>';
 			}
 
 			if (in_array('updateOrder', $this->permission)) {
@@ -132,7 +132,6 @@ class Orders extends Admin_Controller
 			$result['data'][$key] = array(
 				$card,
 				$quantity,
-
 				$checkbox
 			);
 		} // /foreach
@@ -425,15 +424,15 @@ class Orders extends Admin_Controller
 	* It gets the product id and fetches the order data. 
 	* The order print logic is done here 
 	*/
-	public function printDiv($id)
+	public function printDiv($bill)
 	{
-		if (!in_array('viewOrder', $this->permission)) {
-			redirect('dashboard', 'refresh');
-		}
+		// if (!in_array('viewOrder', $this->permission)) {
+		// 	redirect('dashboard', 'refresh');
+		// }
 
-		if ($id) {
-			$order_data = $this->model_orders->getOrdersData($id);
-			$orders_items = $this->model_orders->getOrdersItemData($id);
+		if ($bill) {
+			$order_data = $this->model_orders->getOrdersDataByBill($bill);
+		  $orders_items = $this->model_orders->getOrdersItemData($order_data['id']);
 			$company_info = $this->model_company->getCompanyData(1);
 			// $store_data = $this->model_stores->getStoresData($order_data['store_id']);
 
@@ -445,9 +444,8 @@ class Orders extends Admin_Controller
 			if ($order_data['discount'] > 0) {
 				$discount = $this->currency_code . ' ' . $order_data['discount'];
 			} else {
-				$discount = '0';
+				$discount = '0.0';
 			}
-
 
 			$html = '<!-- Main content -->
 			<!DOCTYPE html>
@@ -459,25 +457,21 @@ class Orders extends Admin_Controller
 			  <!-- Tell the browser to be responsive to screen width -->
 			  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 			  <!-- Bootstrap 3.3.7 -->
-			  <link rel="stylesheet" href="' . base_url('assets/bower_components/bootstrap/dist/css/bootstrap.min.css') . '">
+			  <link rel="stylesheet" href="'.base_url('assets/bower_components/bootstrap/dist/css/bootstrap.min.css').'">
 			  <!-- Font Awesome -->
-			  <link rel="stylesheet" href="' . base_url('assets/bower_components/font-awesome/css/font-awesome.min.css') . '">
-			  <link rel="stylesheet" href="' . base_url('assets/dist/css/AdminLTE.min.css') . '">
-				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.3.0/paper.css">
-				<style>
-   				 @page { size: 58mm } /* output size */
-   				 body.receipt .sheet { width: 58mm } /* sheet size */
-    			 @media print { body.receipt { width: 58mm } } /* fix for Chrome */
- 				</style>
+			  <link rel="stylesheet" href="'.base_url('assets/bower_components/font-awesome/css/font-awesome.min.css').'">
+			  <link rel="stylesheet" href="'.base_url('assets/dist/css/AdminLTE.min.css').'">
 			</head>
-			<body class="receipt" onload="window.print();">
-			  <section class="sheet padding-10mm">
+			<body onload="window.print();">
+			
+			<div class="wrapper">
+			  <section class="invoice">
 			    <!-- title row -->
 			    <div class="row">
 			      <div class="col-xs-12">
 			        <h2 class="page-header">
-			          ' . $company_info['company_name'] . '
-			          <small class="pull-right">Date: ' . $order_date . '</small>
+							<img src="/restaurant/assets/images/logo.jpeg"  width="350" height="200" alt="...">
+			          <small class="pull-right">Date: '.$order_date.'</small>
 			        </h2>
 			      </div>
 			      <!-- /.col -->
@@ -486,8 +480,8 @@ class Orders extends Admin_Controller
 			    <div class="row invoice-info">
 			      
 			      <div class="col-sm-4 invoice-col">
-			        <b>Bill ID: </b> ' . $order_data['bill_no'] . '<br>
-			        <b>Total items: </b> ' . count($orders_items) . '<br><br>
+			        <b>Bill ID: </b> '.$order_data['bill_no'].'<br>
+			        <b>Total items: </b> '.count($orders_items).'<br><br>
 			      </div>
 			      <!-- /.col -->
 			    </div>
@@ -505,21 +499,21 @@ class Orders extends Admin_Controller
 			            <th>Amount</th>
 			          </tr>
 			          </thead>
-			          <tbody>';
+			          <tbody>'; 
 
-			foreach ($orders_items as $k => $v) {
+			          foreach ($orders_items as $k => $v) {
 
-				$product_data = $this->model_products->getProductData($v['product_id']);
-
-				$html .= '<tr>
-				            <td>' . $product_data['name'] . '</td>
-				            <td>' . $this->currency_code . ' ' . $v['rate'] . '</td>
-				            <td>' . $v['qty'] . '</td>
-				            <td>' . $this->currency_code . ' ' . $v['amount'] . '</td>
+			          	$product_data = $this->model_products->getProductData($v['product_id']); 
+			          	
+			          	$html .= '<tr>
+				            <td>'.$product_data['name'].'</td>
+				            <td>'.$this->currency_code . ' ' .$v['rate'].'</td>
+				            <td>'.$v['qty'].'</td>
+				            <td>'.$this->currency_code . ' ' .$v['amount'].'</td>
 			          	</tr>';
-			}
-
-			$html .= '</tbody>
+			          }
+			          
+			          $html .= '</tbody>
 			        </table>
 			      </div>
 			      <!-- /.col -->
@@ -528,50 +522,52 @@ class Orders extends Admin_Controller
 
 			    <div class="row">
 			      
-			     
+			      <div class="col-xs-8 pull-right">
 
 			        <div class="table-responsive">
 			          <table class="table">
 			            <tr>
 			              <th style="width:50%">Gross Amount:</th>
-			              <td>' . $this->currency_code . ' ' . $order_data['gross_amount'] . '</td>
+			              <td>'.$this->currency_code . ' ' .$order_data['gross_amount'].'</td>
 			            </tr>';
 
-			if ($order_data['service_charge_amount'] > 0) {
-				$html .= '<tr>
-				              <th>Service Charge (' . $order_data['service_charge_rate'] . '%)</th>
-				              <td>' . $this->currency_code . ' ' . $order_data['service_charge_amount'] . '</td>
+			            if($order_data['service_charge_amount'] > 0) {
+			            	$html .= '<tr>
+				              <th>Service Charge ('.$order_data['service_charge_rate'].'%)</th>
+				              <td>'.$this->currency_code .' '.$order_data['service_charge_amount'].'</td>
 				            </tr>';
-			}
+			            }
 
-			if ($order_data['vat_charge_amount'] > 0) {
-				$html .= '<tr>
-				              <th>GST (' . $order_data['vat_charge_rate'] . '%)</th>
-				              <td>' . $this->currency_code . ' ' . $order_data['vat_charge_amount'] . '</td>
+			            if($order_data['vat_charge_amount'] > 0) {
+			            	$html .= '<tr>
+				              <th>GST ('.$order_data['vat_charge_rate'].'%)</th>
+				              <td>'.$this->currency_code .' '.$order_data['vat_charge_amount'].'</td>
 				            </tr>';
-			}
-
-
-			$html .= ' <tr>
+			            }
+			            
+			            
+			            $html .=' <tr>
 			              <th>Discount:</th>
-			              <td>' . $discount . '</td>
+			              <td>'.$discount.'</td>
 			            </tr>
 			            <tr>
 			              <th>Net Amount:</th>
-			              <td>' . $this->currency_code . ' ' . $order_data['net_amount'] . '</td>
+			              <td>'.$this->currency_code . ' ' .$order_data['net_amount'].'</td>
 			            </tr>
 			            <tr>
 			              <th>Paid Status:</th>
-			              <td>' . $paid_status . '</td>
+			              <td>'.$paid_status.'</td>
 			            </tr>
 			          </table>
 			        </div>
-			     
+			      </div>
 			      <!-- /.col -->
-			    </div>
+					</div>
+					<small text-align:center>FAMM Food & Beverages</small>
 			    <!-- /.row -->
 			  </section>
 			  <!-- /.content -->
+			</div>
 		</body>
 	</html>';
 
@@ -579,3 +575,5 @@ class Orders extends Admin_Controller
 		}
 	}
 }
+
+

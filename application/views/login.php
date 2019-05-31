@@ -35,6 +35,8 @@
     <body>
     <div class="login-box">
   <div class="login-logo">
+  <img src="/restaurant/assets/images/logo.jpeg"  width="350" height="200" alt="...">
+</br>
     <a href="<?php echo base_url('auth'); ?>"><b>Login</b></a>
   </div>
   <!-- /.login-logo -->

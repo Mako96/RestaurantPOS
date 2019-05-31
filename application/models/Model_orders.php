@@ -1,4 +1,9 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Load Composer's autoloader
+require 'vendor/autoload.php';
 
 class Model_orders extends CI_Model
 {
@@ -8,6 +13,28 @@ class Model_orders extends CI_Model
 
 		$this->load->model('model_tables');
 		$this->load->model('model_users');
+	}
+
+	/* get the orders data */
+	public function getOrdersDataByBill($bill = null)
+	{
+		if ($bill) {
+			$sql = "SELECT * FROM orders WHERE bill_no = ?";
+			$query = $this->db->query($sql, array($bill));
+			return $query->row_array();
+		}
+
+		$user_id = $this->session->userdata('id');
+		if ($user_id == 1) {
+			$sql = "SELECT * FROM orders ORDER BY id DESC";
+			$query = $this->db->query($sql);
+			return $query->result_array();
+		} else {
+			$user_data = $this->model_users->getUserData($user_id);
+			$sql = "SELECT * FROM orders WHERE store_id = ? ORDER BY id DESC";
+			$query = $this->db->query($sql, array($user_data['store_id']));
+			return $query->result_array();
+		}
 	}
 
 	/* get the orders data */
@@ -111,22 +138,49 @@ class Model_orders extends CI_Model
 			$this->db->insert('order_items', $items);
 		}
 
-		// curl_setopt_array($ch = curl_init(), array(
-		// 	CURLOPT_URL => "https://api.pushover.net/1/messages.json",
-		// 	CURLOPT_POSTFIELDS => array(
-		// 		"token" => "auaew8zodo1yj7vp3fcj9n61ksrv9n",
-		// 		"user" => "u6etkur96dmhgo73dcdj34r9m1k91g",
-		// 		"message" => $items,
-		// 	),
-		// 	CURLOPT_SAFE_UPLOAD => true,
-		// 	CURLOPT_RETURNTRANSFER => true,
-		// ));
-		// curl_exec($ch);
-		// curl_close($ch);
+		//Sending PushOver notifications
+		curl_setopt_array($ch = curl_init(), array(
+			CURLOPT_URL => "https://api.pushover.net/1/messages.json",
+			CURLOPT_POSTFIELDS => array(
+				"token" => "auaew8zodo1yj7vp3fcj9n61ksrv9n",
+				"user" => "u6etkur96dmhgo73dcdj34r9m1k91g",
+				"message" => base_url('orders/printDiv/'.$bill_no),
+			),
+			CURLOPT_SAFE_UPLOAD => true,
+			CURLOPT_RETURNTRANSFER => true,
+		));
+		curl_exec($ch);
+		curl_close($ch);
+
+		//Sending email to Customer
+		// require_once "PHPMailer/PHPMailer.php";
+		// require_once "PHPMailer/SMTP.php";
+		// require_once "PHPMailer/Exception.php";
+
+		$mail = new PHPMailer();
+		//SMTP Settings
+		$mail -> isSMTP();
+		$mail -> Host = "localhost";
+		$mail -> SMTPAuth = true;
+		$mail -> Username = "murtaz1996@gmail.com";
+		$mail -> Password = "13579qwe";
+		$mail -> Port = 587; //587
+		$mail -> SMTPSecure = "tls"; //tls
+		
+		//Email Settings
+		$mail -> isHTML(true);
+		$mail -> setFrom("murtaz1996@gmail.com",'Murtaza Babrawala');
+		$mail -> addAddress($this->input->post('customerEmailSubmit'));
+		$mail -> Subject = "Thank you for placing your new order " . $bill_no;
+		$mail -> Body = "Your order has been placed! Here's your E-Bill. Save trees!!" . base_url('orders/printDiv/'.$bill_no);
+		
+		$mail -> send();
+
+		
 		// update the table status
 		// $this->load->model('model_tables');
 		// $this->model_tables->update($this->input->post('table_name'), array('available' => 2));
-
+		// mail("murtaz1996@gmail.com","Thank you for placing your new order " . $bill_no, "Your order has been placed! Here's your E-Bill. Save trees!!" . base_url('orders/printDiv/'.$bill_no));
 		return ($order_id) ? $order_id : false;
 	}
 
