@@ -86,7 +86,7 @@ class Model_orders extends CI_Model
 		$user_data = $this->model_users->getUserData($user_id);
 		$store_id = $user_data['store_id'];
 
-		$bill_no = 'BILPR-' . strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 4));
+		$bill_no = 'RCA-' . strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 4));
 
 		$data = array(
 			'bill_no' => $bill_no,
@@ -157,22 +157,27 @@ class Model_orders extends CI_Model
 		// require_once "PHPMailer/SMTP.php";
 		// require_once "PHPMailer/Exception.php";
 
-		$mail = new PHPMailer();
+		$mail = new PHPMailer(true);
 		//SMTP Settings
-		$mail -> isSMTP();
-		$mail -> Host = "localhost";
-		$mail -> SMTPAuth = true;
-		$mail -> Username = "murtaz1996@gmail.com";
-		$mail -> Password = "13579qwe";
-		$mail -> Port = 587; //587
-		$mail -> SMTPSecure = "tls"; //tls
+        $mail->SMTPDebug = 2; //Alternative to above constant
+        // $mail->isSMTP();
+        $mail->Host = 'relay-hosting.secureserver.net';
+        $mail->Port = 25;
+        $mail->SMTPAuth = false;
+        $mail->SMTPSecure = false;
+// 		$mail -> Host = "md-48.webhostbox.net";
+// 		$mail -> SMTPAuth = true;
+// 		$mail -> Username = "hello@rollscameraaction.com";
+// 		$mail -> Password = ".Digital@1234";
+// 		$mail -> Port = 587; //587
+// 		$mail -> SMTPSecure = "tls"; //tls
 		
 		//Email Settings
 		$mail -> isHTML(true);
-		$mail -> setFrom("murtaz1996@gmail.com",'Murtaza Babrawala');
+		$mail -> setFrom("hello@rollscameraaction.com",'Rolls Camera Action');
 		$mail -> addAddress($this->input->post('customerEmailSubmit'));
-		$mail -> Subject = "Thank you for placing your new order " . $bill_no;
-		$mail -> Body = "Your order has been placed! Here's your E-Bill. Save trees!!" . base_url('orders/printDiv/'.$bill_no);
+		$mail -> Subject = "Your Order " . $bill_no . " has been placed!";
+		$mail -> Body = "<img src=" . base_url('assets/images/logo.jpeg') ."  width='350' height='200' alt='...'></br> Thank you for visiting Rolls Camera Action! Here's your <a href =" . base_url('orders/printDiv/'.$bill_no) .">E-Bill.</a>";
 		
 		$mail -> send();
 

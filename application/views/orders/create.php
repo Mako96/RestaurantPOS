@@ -1,4 +1,4 @@
-    <!doctype html>
+<!doctype html>
     <html>
 
     <head>
@@ -196,7 +196,7 @@
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#paymentModal">Next</button>
+                        <button type="button" onclick="insertNewCustomer()" class="btn btn-primary" data-toggle="modal" data-target="#paymentModal">Next</button>
                       </div>
 
                   </form>
@@ -220,13 +220,13 @@
                       <!-- small box -->
                       <div class="small-box bg-aqua mui--z3">
                         <div class="inner">
-                          <h3>Payment</h3>
-                          <p>Cash, Card, Wallets</p>
+                          <h4>Bank Payment</h4>
+                          <p>Card, Paytm, IMPS</p>
                         </div>
                         <div class="icon">
                           <i class="ion ion-card"></i>
                         </div>
-                        <a data-toggle="modal" data-target="#firstModal" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a data-toggle="modal" data-target="#firstModal" class="small-box-footer">Select Method <i class="fa fa-arrow-circle-right"></i></a>
                       </div>
 
                       <!-- ./col -->
@@ -234,40 +234,38 @@
                       <!-- small box -->
                       <div class="small-box bg-green mui--z3">
                         <div class="inner">
-                          <h3>Delivery Service</h3>
+                          <h4>Delivery Service</h4>
 
                           <p>Zomato, Uber EATS, Swiggy</p>
                         </div>
                         <div class="icon">
                           <i class=" ion ion-android-bicycle"></i>
                         </div>
-                        <a data-toggle="modal" data-target="#secondModal" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a data-toggle="modal" data-target="#secondModal" class="small-box-footer">Select Method <i class="fa fa-arrow-circle-right"></i></a>
                       </div>
                       <!-- ./col -->
 
                       <!-- small box -->
-                      <div class="small-box bg-yellow mui--z3">
+                      <div class="small-box bg-yellow mui--z3" onclick='placeOrder(3)'>
                         <div class="inner">
-                          <h3>Cash on Delivery</h3>
+                          <h4>Cash on Delivery</h4>
 
                           <p>Pay later</p>
                         </div>
                         <div class="icon">
                           <i class="ion ion-cash"></i>
                         </div>
-                        <a type="button" onclick='placeOrder(3)' class="small-box-footer">Create Order<i class="fa fa-arrow-circle-right"></i></a>
                       </div>
                       <!-- ./col -->
 
                       <!-- small box -->
-                      <div class="small-box bg-red mui--z3">
+                      <div class="small-box bg-red mui--z3" onclick='placeOrder(2)'>
                         <div class="inner">
-                          <h3>Cash Now</h3>
+                          <h4>Cash Now</h4>
                         </div>
                         <div class="icon">
                           <i class="ion ion-cash"></i>
                         </div>
-                        <a type="button" onclick='placeOrder(2)' class="small-box-footer">Create Order<i class="fa fa-arrow-circle-right"></i></a>
                       </div>
                       <!-- ./col -->
                   </form>
@@ -285,7 +283,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Select Payment Method :</h5>
+              <h5 class="modal-title">Bank Payment Method :</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -294,27 +292,37 @@
 
               <div class="modal-body">
                 <!-- small box -->
-                <div class="small-box bg-aqua mui--z3">
+                <div class="small-box bg-aqua mui--z3" onclick='placeOrder(1)'>
                   <div class="inner">
                     <h3>Card</h3>
                   </div>
                   <div class="icon">
                     <i class="ion ion-card"></i>
                   </div>
-                  <a type="button" onclick='placeOrder(1)' class="small-box-footer">Create Order<i class="fa fa-arrow-circle-right"></i></a>
                 </div>
 
                 <!-- ./col -->
 
                 <!-- small box -->
-                <div class="small-box bg-green mui--z3">
+                <div class="small-box bg-gray mui--z3" onclick='placeOrder(7)'>
                   <div class="inner">
-                    <h3>Wallet</h3>
+                    <h3><img src="/assets/images/Paytm.png"  width="150" height="60" alt="..."></h3>
                   </div>
                   <div class="icon">
                     <i class="ion ion-wallet"></i>
                   </div>
-                  <a type="button" onclick='placeOrder(7)' class="small-box-footer">Create Order<i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+
+                <!-- ./col -->
+
+                <!-- small box -->
+                <div class="small-box bg-green mui--z3" onclick='placeOrder(8)'>
+                  <div class="inner">
+                    <h3>IMPS</h3>
+                  </div>
+                  <div class="icon">
+                    <i class="ion ion-bank"></i>
+                  </div>
                 </div>
 
                 <!-- ./col -->
@@ -328,7 +336,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Second title</h5>
+              <h5 class="modal-title">Select Delivery Service : </h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -338,42 +346,39 @@
               <div class="modal-body">
 
                 <!-- small box -->
-                <div class="small-box bg-red mui--z3">
+                <div class="small-box bg-gray mui--z3" onclick='placeOrder(6)'>
                   <div class="inner">
-                    <h3>Zomato</h3>
+                    <h3><img src="/assets/images/Zomato.jpg"  width="160" height="70" alt="..."></h3>
                   </div>
                   <div class="icon">
-                    <i class="ion ion-card"></i>
+                    <i class="ion ion-android-bicycle"></i>
                   </div>
-                  <a type="button" onclick='placeOrder(6)' class="small-box-footer">Create Order<i class="fa fa-arrow-circle-right"></i></a>
+                  
                 </div>
 
                 <!-- ./col -->
 
                 <!-- small box -->
-                <div class="small-box bg-green mui--z3">
+                <div class="small-box bg-gray mui--z3" onclick='placeOrder(5)'>
                   <div class="inner">
-                    <h3>UberEATS</h3>
+                    <h3><img src="/assets/images/uberEATS.png"  width="220" height="70" alt="..."></h3>
                   </div>
                   <div class="icon">
                     <i class=" ion ion-android-bicycle"></i>
                   </div>
-                  <a type="button" onclick='placeOrder(5)' class="small-box-footer">Create Order<i class="fa fa-arrow-circle-right"></i></a>
+                  
                 </div>
 
                 <!-- ./col -->
 
                 <!-- small box -->
-                <div class="small-box bg-orange mui--z3">
+                <div class="small-box bg-gray mui--z3" onclick='placeOrder(4)'>
                   <div class="inner">
-                    <h3>Swiggy</h3>
-
-                    <p>Pay later</p>
+                    <h3><img src="/assets/images/swiggy.png"  width="200" height="70" alt="..."></h3>
                   </div>
                   <div class="icon">
-                    <i class="ion ion-cash"></i>
+                    <i class="ion ion-android-bicycle"></i>
                   </div>
-                  <a type="button" onclick='placeOrder(4)' class="small-box-footer">Create Order <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
 
                 <!-- ./col -->
@@ -381,29 +386,6 @@
           </div>
         </div>
       </div>
-
-
-      <!-- <div class="modal" id="thirdModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Third title</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p>Modal body text goes here.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-primary">Save changes</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div> -->
-
-
     </body>
 
     </html>
@@ -586,8 +568,8 @@
           totalAmount += total;
         });
 
-        var taxRate = 10.0;
-        var tax = parseFloat(totalAmount / taxRate);
+        var taxRate = <?php echo ($company_data['vat_charge_value'] > 0) ? $company_data['vat_charge_value']:0; ?>;
+        var tax = 0; //parseFloat(totalAmount / taxRate);
         grandTotal = totalAmount + tax;
 
         $("#gross_amount").val(totalAmount);
